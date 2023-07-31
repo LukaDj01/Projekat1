@@ -4,8 +4,8 @@ body{
     align-items: center;
 }
 
-/* unos */
-.divUnos{
+/* input */
+.divInput{
     display: flex;
     flex-direction: column;
     border: 2px solid black;
@@ -14,54 +14,54 @@ body{
     margin: 25px
 }
 
-.jImeDiv, .imeDiv, .prezimeDiv{
+.usernameDiv, .firstNameDiv, .lastNameDiv{
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
 
-.polDiv{
+.genderDiv{
     display: flex;
     justify-content: space-between;
 }
 
-.polMiŽDiv{
+.genderMFDiv{
     display: flex;
     flex-wrap: wrap;
 }
 
-.polŽDiv{
+.genderFDiv{
     margin-left: 20px;
     margin-right: 5px;
 }
 
-.jImeLabela, .imeLabela, .prezimeLabela, .polLabela{
+.usernameLabel, .firstNameLabel, .lastNameLabel, .genderLabel{
     margin: 5px;
 }
 
-.jImeVrednost, .imeVrednost, .prezimeVrednost, .polVrednost{
+.usernameValue, .firstNameValue, .lastNameValue, .genderValue{
     margin: 5px;
 }
 
-.dugmeDiv{
+.buttonDiv{
     margin: 5px;
     align-self: center;
 }
 
-.dugmeVrednost{
+.buttonValue, .actBtn1Value, .actBtn11Value{
     cursor: pointer;
 }
 
-/* lopte */
+/* spheres */
 
-.divLopte{
+.spheresDiv{
     display: flex;
     margin: 15px;
     width: fit-content;
     height: fit-content;
 }
 
-.prvaLoptaDiv, .drugaLoptaDiv{
+.firstSphereDiv, .secondSphereDiv{
     display: flex;
     margin-left: 15px;
     margin-right: 15px;
@@ -73,6 +73,19 @@ body{
     justify-content: space-around;
 }
 
-.prvaLoptaLabela, .drugaLoptaLabela{
+.firstSphereLabel, .secondSphereLabel{
     font-size: 70px;
+}
+
+.actBtnDiv{
+    display: flex;
+}
+
+.actBtn1Value{
+    margin-right: 10px;
+    background-color: green;
+}
+
+.actBtn11Value{
+    background-color: red;
 }
