@@ -1,4 +1,5 @@
 import { Forma } from "./forma";
 
-const froma = new Forma(document.body);
-froma.crtaj();
+const forma = new Forma(document.body);
+forma.crtajUnos();
+forma.crtajLopte();

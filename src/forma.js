@@ -3,7 +3,7 @@ export class Forma{
         this.host=host;
     }
 
-    crtaj(){
+    crtajUnos(){
         const divUnos = document.createElement("div");
         divUnos.classList.add("divUnos");
         this.host.appendChild(divUnos);
@@ -112,5 +112,31 @@ export class Forma{
         dugmeVrednost.classList.add("dugmeVrednost");
         dugmeVrednost.textContent="Unesi";
         dugmeDiv.appendChild(dugmeVrednost);
+    }
+
+    crtajLopte(){
+        const divLopte = document.createElement("div");
+        divLopte.classList.add("divLopte");
+        this.host.appendChild(divLopte);
+
+        // prva
+        const prvaLoptaDiv = document.createElement("div");
+        prvaLoptaDiv.classList.add("prvaLoptaDiv");
+        divLopte.appendChild(prvaLoptaDiv);
+
+        const prvaLoptaLabela = document.createElement("label");
+        prvaLoptaLabela.classList.add("prvaLoptaLabela");
+        prvaLoptaLabela.textContent="7";
+        prvaLoptaDiv.appendChild(prvaLoptaLabela);
+
+        // druga
+        const drugaLoptaDiv = document.createElement("div");
+        drugaLoptaDiv.classList.add("drugaLoptaDiv");
+        divLopte.appendChild(drugaLoptaDiv);
+
+        const drugaLoptaLabela = document.createElement("label");
+        drugaLoptaLabela.classList.add("drugaLoptaLabela");
+        drugaLoptaLabela.textContent="4";
+        drugaLoptaDiv.appendChild(drugaLoptaLabela);
     }
 }
