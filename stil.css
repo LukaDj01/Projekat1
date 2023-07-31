@@ -1,0 +1,45 @@
+.divUnos{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    width: fit-content;
+    margin: 50px
+}
+
+.jImeDiv, .imeDiv, .prezimeDiv{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.polDiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+.polMiŽDiv{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.polŽDiv{
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
+.jImeLabela, .imeLabela, .prezimeLabela, .polLabela{
+    margin: 5px;
+}
+
+.jImeVrednost, .imeVrednost, .prezimeVrednost, .polVrednost{
+    margin: 5px;
+}
+
+.dugmeDiv{
+    margin: 5px;
+    align-self: center;
+}
+
+.dugmeVrednost{
+    cursor: pointer;
+}
