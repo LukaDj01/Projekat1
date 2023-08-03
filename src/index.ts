@@ -1,6 +1,7 @@
-import { Observable, Subscription, filter, from, map, of, pairwise, takeUntil, zip } from "rxjs";
+import { Observable, Observer, Subscription, filter, from, interval, map, of, pairwise, take, takeUntil, zip } from "rxjs";
 import { Form } from "./form";
 import { Person } from "./person";
+import { getRandomIndex, getRandomInterval } from "./randomFunc";
 
 const form = new Form(document.body);
 form.drawInput();
@@ -24,8 +25,78 @@ const niz2:Array<number>=[1,2,3,4,5,6];
 const number1$ : Observable<number> = from(niz1);
 const number2$ : Observable<number> = from(niz2);
 
+firstSphereNumber.textContent=`${niz1.length}`;
+secondSphereNumber.textContent=`${niz2.length}`;
 
-from(persons).pipe(
+function firstSphere(array: Array<number>) {
+    return new Observable((obs)=>{
+        setInterval(()=>{
+            const randomIndex = getRandomIndex(array);
+            const randomValue = array[randomIndex];
+
+            obs.next(randomValue)
+            array.splice(randomIndex, 1);
+            firstSphereNumber.textContent=`${niz1.length}`;
+            
+        }, getRandomInterval());
+        
+    }).pipe(
+        take(array.length)
+    ).subscribe(o=>console.log("Prva: " + o));
+}
+firstSphere(niz1);
+
+function secondSphere(array: Array<number>) {
+    return new Observable((obs)=>{
+        setInterval(()=>{
+            const randomIndex = getRandomIndex(array);
+            const randomValue = array[randomIndex];
+
+            obs.next(randomValue)
+            array.splice(randomIndex, 1);
+            secondSphereNumber.textContent=`${niz2.length}`;
+            
+        }, getRandomInterval());
+        
+    }).pipe(
+        take(array.length)
+    ).subscribe(o=>console.log("Druga: " + o));
+}
+secondSphere(niz2);
+
+
+
+/*const arrayValues = [1, 2, 3, 4, 5, 6];
+
+// Funkcija koja generiše nasumičan indeks iz niza
+function getRandomIndex() {
+  return Math.floor(Math.random() * arrayValues.length);
+}
+
+// Observable koji emituje brojeve redom: 0, 1, 2, ...
+const source$ = interval(200).pipe(
+  take(arrayValues.length)
+);
+
+// Pratimo Observable i ispisujemo nasumične vrednosti na ekran
+const subscription = source$.subscribe(() => {
+  if (arrayValues.length === 0) {
+    console.log("Nema više elemenata.");
+    subscription.unsubscribe(); // Prekidamo pretplatu kada nema više elemenata u nizu
+    return;
+  }
+
+  const randomIndex = getRandomIndex();
+  const randomValue = arrayValues[randomIndex];
+
+  // Izbacujemo pročitanu vrednost iz niza
+  arrayValues.splice(randomIndex, 1);
+
+  console.log(randomValue);
+});*/
+
+
+/*from(persons).pipe(
     filter((person:Person)=>person.gender==="M"),
 ).subscribe(o=>{
     male.push(o);
@@ -52,9 +123,9 @@ function action1() : Subscription{
         setInterval(()=>{
         },3000);
     }).pipe
-}*/
+}*//*
 
 actBtn1.addEventListener("click", ()=> {
    const subAct1 : Subscription = action1();
    actBtn11.onclick = ()=>subAct1.unsubscribe();
-});
+});*/
