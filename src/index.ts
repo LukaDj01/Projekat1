@@ -6,42 +6,39 @@ import { getRandomIndex, getRandomInterval } from "./randomFunc";
 const form = new Form(document.body);
 form.drawInput();
 form.drawSpheres();
-form.drawActionButtons();
+form.drawVolunteersView();
 
 const firstSphereNumber : HTMLLabelElement= document.querySelector(".firstSphereLabel");
 const secondSphereNumber : HTMLLabelElement= document.querySelector(".secondSphereLabel");
-const actBtn1 : HTMLButtonElement= document.querySelector(".actBtn1Value");
-const actBtn11 : HTMLButtonElement= document.querySelector(".actBtn11Value");
 
+let maleArray:Array<Person> = [];
+let femaleArray:Array<Person> = [];
+maleArray.push(new Person("Nikola123", "Nikola", "Jovanovic", "M"));
+maleArray.push(new Person("Kalu0", "Luka0", "Djordjevic", "M"));
+maleArray.push(new Person("Kalu1", "Luka1", "Djordjevic", "M"));
+maleArray.push(new Person("Kalu2", "Luka2", "Djordjevic", "M"));
+maleArray.push(new Person("Kalu3", "Luka3", "Djordjevic", "M"));
+femaleArray.push(new Person("Sara0", "Sara0", "Jovanovic", "F"));
+femaleArray.push(new Person("Sara1", "Sara1", "Jovanovic", "F"));
+femaleArray.push(new Person("Sara2", "Sara2", "Jovanovic", "F"));
 
-let persons:Array<Person> = [];
-let male:Array<Person> = [];
-let female:Array<Person> = [];
-persons.push(new Person("Nikola123", "Nikola", "Jovanovic", "M"));
-persons.push(new Person("Kalu22", "Luka", "Djordjevic", "M"));
-persons.push(new Person("Sara111", "Sara", "Jovanovic", "F"));
-const niz1:Array<number>=[1,2,3,4,5,6,7];
-const niz2:Array<number>=[1,2,3,4,5];
-const number1$ : Observable<number> = from(niz1);
-const number2$ : Observable<number> = from(niz2);
-
-firstSphereNumber.textContent=`${niz1.length}`;
-secondSphereNumber.textContent=`${niz2.length}`;
+firstSphereNumber.textContent=`${maleArray.length}`;
+secondSphereNumber.textContent=`${femaleArray.length}`;
 
 function firstSphere(ob$: Observable<any>) {
     return new Observable((gen)=>{
         const intervalId = setInterval(()=>{
-            if (niz1.length === 0) {
+            if (maleArray.length === 0) {
                 gen.complete();
                 clearInterval(intervalId);
                 return;
             }
-            const randomIndex = getRandomIndex(niz1);
-            const randomValue = niz1[randomIndex];
+            const randomIndex = getRandomIndex(maleArray);
+            const randomValue = maleArray[randomIndex];
 
             gen.next(randomValue)
-            niz1.splice(randomIndex, 1);
-            firstSphereNumber.textContent=`${niz1.length}`;
+            maleArray.splice(randomIndex, 1);
+            firstSphereNumber.textContent=`${maleArray.length}`;
             
         }, 600); //getRandomInterval()
 
@@ -49,23 +46,25 @@ function firstSphere(ob$: Observable<any>) {
             clearInterval(intervalId);
             gen.complete();
         });
-    })
+    })/*.pipe(
+        takeUntil(ob$) // nece
+    )*/
 }
 
 function secondSphere(ob$: Observable<any>) {
     return new Observable((gen)=>{
         const intervalId = setInterval(()=>{
-            if (niz2.length === 0) {
+            if (femaleArray.length === 0) {
                 gen.complete();
                 clearInterval(intervalId);
                 return;
             }
-            const randomIndex = getRandomIndex(niz2);
-            const randomValue = niz2[randomIndex];
+            const randomIndex = getRandomIndex(femaleArray);
+            const randomValue = femaleArray[randomIndex];
 
             gen.next(randomValue)
-            niz2.splice(randomIndex, 1);
-            secondSphereNumber.textContent=`${niz2.length}`;
+            femaleArray.splice(randomIndex, 1);
+            secondSphereNumber.textContent=`${femaleArray.length}`;
             
         }, 400); //getRandomInterval()
 
@@ -77,40 +76,52 @@ function secondSphere(ob$: Observable<any>) {
 }
 
 // solo volunteers
-actBtn1.onclick=()=>{
-    let num = 1;
-    let border = niz1.length !== 0 ? niz1.length : 0;
-    const controlFlow$ = new Subject();
-    return merge(firstSphere(controlFlow$), secondSphere(controlFlow$)).pipe(
-        map((x:number) => `${num++}. ${x}`),
-        take(border)
-    ).subscribe(
-        {
-            next: (o:string)=> console.log(o),
-            complete: () => {
-                controlFlow$.next(1);
+function genSoloVolunteers() {
+    const genSoloVolunteersBtn : HTMLButtonElement= document.querySelector(".genSoloVolunteersBtn");
+    genSoloVolunteersBtn.onclick=()=>{
+        let num = 1;
+        let border = 5;
+        const controlFlow$ = new Subject();
+        return merge(firstSphere(controlFlow$), secondSphere(controlFlow$)).pipe(
+            map((x:Person) => `${num++}. ${x.firstName} (${x.username}) ${x.lastName}`),
+            take(border)
+        ).subscribe(
+            {
+                next: (o:string)=> {
+                    console.log(o)
+                },
+                complete: () => {
+                    controlFlow$.next(1);
+                }
             }
-        }
-    );
+        );
+    };
 };
+genSoloVolunteers();
 
 // pair volunteers
-actBtn11.onclick=()=>{
-    let num = 1;
-    let border = niz1.length < niz2.length ? niz1.length : niz2.length;
-    const controlFlow$ = new Subject();
-    return zip([firstSphere(controlFlow$), secondSphere(controlFlow$)]).pipe(
-        map((pair:[number, number])=> `${num++}. ${pair[0]} - ${pair[1]}`),
-        take(border)
-    ).subscribe(
-        {
-            next: (o:string)=> console.log(o),
-            complete: () => {
-                controlFlow$.next(1);
+function genPairVolunteers() {
+    const genPairVolunteersBtn : HTMLButtonElement= document.querySelector(".genPairVolunteersBtn");
+    genPairVolunteersBtn.onclick=()=>{
+        let num = 1;
+        let border = maleArray.length < femaleArray.length ? maleArray.length : femaleArray.length;
+        const controlFlow$ = new Subject();
+        return zip([firstSphere(controlFlow$), secondSphere(controlFlow$)]).pipe(
+            map((pair:[Person, Person])=> `${num++}. par: ${pair[0].username} - ${pair[1].username}`),
+            take(border)
+        ).subscribe(
+            {
+                next: (o:string)=> {
+                    console.log(o)
+                },
+                complete: () => {
+                    controlFlow$.next(1);
+                }
             }
-        }
-    );
+        );
+    };
 };
+genPairVolunteers();
 
 
 

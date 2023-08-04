@@ -104,14 +104,14 @@ export class Form{
         genderFDiv.appendChild(genderFValue);
 
         // Button
-        const buttonDiv = document.createElement("div");
-        buttonDiv.classList.add("buttonDiv");
-        divInput.appendChild(buttonDiv);
+        const buttonEnterDiv = document.createElement("div");
+        buttonEnterDiv.classList.add("buttonEnterDiv");
+        divInput.appendChild(buttonEnterDiv);
 
-        const buttonValue = document.createElement("button");
-        buttonValue.classList.add("buttonValue");
-        buttonValue.textContent="Enter";
-        buttonDiv.appendChild(buttonValue);
+        const buttonEnterValue = document.createElement("button");
+        buttonEnterValue.classList.add("buttonEnterValue");
+        buttonEnterValue.textContent="Enter";
+        buttonEnterDiv.appendChild(buttonEnterValue);
     }
 
     drawSpheres(){
@@ -140,29 +140,113 @@ export class Form{
         secondSphereDiv.appendChild(secondSphereLabel);
     }
 
-    drawActionButtons(){
+    /*drawActionButtons(){
         const actBtnDiv = document.createElement("div");
         actBtnDiv.classList.add("actBtnDiv");
         this.host.appendChild(actBtnDiv);
 
-        // Button
-        const actBtn1Div = document.createElement("div");
-        actBtn1Div.classList.add("actBtn1Div");
-        actBtnDiv.appendChild(actBtn1Div);
+        // Button genSoloVol
+        const genSoloVolunteersDiv = document.createElement("div");
+        genSoloVolunteersDiv.classList.add("genSoloVolunteersDiv");
+        actBtnDiv.appendChild(genSoloVolunteersDiv);
 
-        const actBtn1Value = document.createElement("button");
-        actBtn1Value.classList.add("actBtn1Value");
-        actBtn1Value.textContent="Action 1";
-        actBtn1Div.appendChild(actBtn1Value);
+        const genSoloVolunteersBtn = document.createElement("button");
+        genSoloVolunteersBtn.classList.add("genSoloVolunteersBtn");
+        genSoloVolunteersBtn.textContent="Action 1";
+        genSoloVolunteersDiv.appendChild(genSoloVolunteersBtn);
 
-        // Button
-        const actBtn11Div = document.createElement("div");
-        actBtn11Div.classList.add("actBtn11Div");
-        actBtnDiv.appendChild(actBtn11Div);
+        // Button genPair
+        const genPairVolunteersDiv = document.createElement("div");
+        genPairVolunteersDiv.classList.add("genPairVolunteersDiv");
+        actBtnDiv.appendChild(genPairVolunteersDiv);
 
-        const actBtn11Value = document.createElement("button");
-        actBtn11Value.classList.add("actBtn11Value");
-        actBtn11Value.textContent="Action 11";
-        actBtn11Div.appendChild(actBtn11Value);
+        const genPairVolunteersBtn = document.createElement("button");
+        genPairVolunteersBtn.classList.add("genPairVolunteersBtn");
+        genPairVolunteersBtn.textContent="Action 11";
+        genPairVolunteersDiv.appendChild(genPairVolunteersBtn);
+    }*/
+
+    drawVolunteersView(){
+        const volunteersViewDiv = document.createElement("div");
+        volunteersViewDiv.classList.add("volunteersViewDiv");
+        this.host.appendChild(volunteersViewDiv);
+
+        // solo volunteers
+        const soloVolunteersDiv = document.createElement("div");
+        soloVolunteersDiv.classList.add("soloVolunteersDiv");
+        volunteersViewDiv.appendChild(soloVolunteersDiv);
+
+        // genPair
+        const genSoloVolunteersDiv = document.createElement("div");
+        genSoloVolunteersDiv.classList.add("genSoloVolunteersDiv");
+        soloVolunteersDiv.appendChild(genSoloVolunteersDiv);
+
+        const countSoloVolunteersDiv = document.createElement("div");
+        countSoloVolunteersDiv.classList.add("countSoloVolunteersDiv");
+        genSoloVolunteersDiv.appendChild(countSoloVolunteersDiv);
+
+        const countSoloVolunteersLabel = document.createElement("label");
+        countSoloVolunteersLabel.classList.add("countSoloVolunteersLabel");
+        countSoloVolunteersLabel.textContent="Number: ";
+        countSoloVolunteersDiv.appendChild(countSoloVolunteersLabel);
+
+        const countSoloVolunteersInput = document.createElement("input");
+        countSoloVolunteersInput.type="number";
+        countSoloVolunteersInput.classList.add("countSoloVolunteersInput");
+        countSoloVolunteersDiv.appendChild(countSoloVolunteersInput);
+
+        // pair button
+        const genSoloVolunteersBtn = document.createElement("button");
+        genSoloVolunteersBtn.classList.add("genSoloVolunteersBtn");
+        genSoloVolunteersBtn.textContent="Solo Volunteer";
+        genSoloVolunteersDiv.appendChild(genSoloVolunteersBtn);
+
+        // solo view
+        const soloVolunteersViewDiv = document.createElement("div");
+        soloVolunteersViewDiv.classList.add("soloVolunteersViewDiv");
+        soloVolunteersDiv.appendChild(soloVolunteersViewDiv);
+
+        const proba1 = document.createElement("label");
+        proba1.textContent="proba";
+        soloVolunteersViewDiv.appendChild(proba1);
+
+        // pair volunteers
+        const pairVolunteersDiv = document.createElement("div");
+        pairVolunteersDiv.classList.add("pairVolunteersDiv");
+        volunteersViewDiv.appendChild(pairVolunteersDiv);
+
+        // genPair
+        const genPairVolunteersDiv = document.createElement("div");
+        genPairVolunteersDiv.classList.add("genPairVolunteersDiv");
+        pairVolunteersDiv.appendChild(genPairVolunteersDiv);
+
+        const countPairVolunteersDiv = document.createElement("div");
+        countPairVolunteersDiv.classList.add("countPairVolunteersDiv");
+        genPairVolunteersDiv.appendChild(countPairVolunteersDiv);
+
+        const countPairVolunteersLabel = document.createElement("label");
+        countPairVolunteersLabel.classList.add("countPairVolunteersLabel");
+        countPairVolunteersLabel.textContent="Number: ";
+        countPairVolunteersDiv.appendChild(countPairVolunteersLabel);
+
+        const countPairVolunteersInput = document.createElement("input");
+        countPairVolunteersInput.type="number";
+        countPairVolunteersInput.classList.add("countPairVolunteersInput");
+        countPairVolunteersDiv.appendChild(countPairVolunteersInput);
+
+        // pair button
+        const genPairVolunteersBtn = document.createElement("button");
+        genPairVolunteersBtn.classList.add("genPairVolunteersBtn");
+        genPairVolunteersBtn.textContent="Pair Volunteer";
+        genPairVolunteersDiv.appendChild(genPairVolunteersBtn);
+
+        // pair view
+        const pairVolunteersViewDiv = document.createElement("div");
+        pairVolunteersViewDiv.classList.add("pairVolunteersViewDiv");
+        pairVolunteersDiv.appendChild(pairVolunteersViewDiv);
+
+        const proba2 = document.createElement("label");
+        proba2.textContent="proba2";
+        pairVolunteersViewDiv.appendChild(proba2);
     }
 }
