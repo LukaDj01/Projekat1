@@ -1,4 +1,4 @@
-import { Observable, Observer, Subscription, filter, from, interval, map, of, pairwise, take, takeUntil, zip } from "rxjs";
+import { Observable, Observer, Subject, Subscription, filter, from, interval, map, merge, of, pairwise, take, takeUntil, zip } from "rxjs";
 import { Form } from "./form";
 import { Person } from "./person";
 import { getRandomIndex, getRandomInterval } from "./randomFunc";
@@ -21,48 +21,96 @@ persons.push(new Person("Nikola123", "Nikola", "Jovanovic", "M"));
 persons.push(new Person("Kalu22", "Luka", "Djordjevic", "M"));
 persons.push(new Person("Sara111", "Sara", "Jovanovic", "F"));
 const niz1:Array<number>=[1,2,3,4,5,6,7];
-const niz2:Array<number>=[1,2,3,4,5,6];
+const niz2:Array<number>=[1,2,3,4,5];
 const number1$ : Observable<number> = from(niz1);
 const number2$ : Observable<number> = from(niz2);
 
 firstSphereNumber.textContent=`${niz1.length}`;
 secondSphereNumber.textContent=`${niz2.length}`;
 
-function firstSphere(array: Array<number>) {
-    return new Observable((obs)=>{
-        setInterval(()=>{
-            const randomIndex = getRandomIndex(array);
-            const randomValue = array[randomIndex];
+function firstSphere(ob$: Observable<any>) {
+    return new Observable((gen)=>{
+        const intervalId = setInterval(()=>{
+            if (niz1.length === 0) {
+                gen.complete();
+                clearInterval(intervalId);
+                return;
+            }
+            const randomIndex = getRandomIndex(niz1);
+            const randomValue = niz1[randomIndex];
 
-            obs.next(randomValue)
-            array.splice(randomIndex, 1);
+            gen.next(randomValue)
+            niz1.splice(randomIndex, 1);
             firstSphereNumber.textContent=`${niz1.length}`;
             
-        }, getRandomInterval());
-        
-    }).pipe(
-        take(array.length)
-    ).subscribe(o=>console.log("Prva: " + o));
+        }, 600); //getRandomInterval()
+
+        ob$.subscribe(() => {
+            clearInterval(intervalId);
+            gen.complete();
+        });
+    })
 }
-firstSphere(niz1);
 
-function secondSphere(array: Array<number>) {
-    return new Observable((obs)=>{
-        setInterval(()=>{
-            const randomIndex = getRandomIndex(array);
-            const randomValue = array[randomIndex];
+function secondSphere(ob$: Observable<any>) {
+    return new Observable((gen)=>{
+        const intervalId = setInterval(()=>{
+            if (niz2.length === 0) {
+                gen.complete();
+                clearInterval(intervalId);
+                return;
+            }
+            const randomIndex = getRandomIndex(niz2);
+            const randomValue = niz2[randomIndex];
 
-            obs.next(randomValue)
-            array.splice(randomIndex, 1);
+            gen.next(randomValue)
+            niz2.splice(randomIndex, 1);
             secondSphereNumber.textContent=`${niz2.length}`;
             
-        }, getRandomInterval());
-        
-    }).pipe(
-        take(array.length)
-    ).subscribe(o=>console.log("Druga: " + o));
+        }, 400); //getRandomInterval()
+
+        ob$.subscribe(() => {
+            clearInterval(intervalId);
+            gen.complete();
+        });
+    })
 }
-secondSphere(niz2);
+
+// solo volunteers
+actBtn1.onclick=()=>{
+    let num = 1;
+    let border = niz1.length !== 0 ? niz1.length : 0;
+    const controlFlow$ = new Subject();
+    return merge(firstSphere(controlFlow$), secondSphere(controlFlow$)).pipe(
+        map((x:number) => `${num++}. ${x}`),
+        take(border)
+    ).subscribe(
+        {
+            next: (o:string)=> console.log(o),
+            complete: () => {
+                controlFlow$.next(1);
+            }
+        }
+    );
+};
+
+// pair volunteers
+actBtn11.onclick=()=>{
+    let num = 1;
+    let border = niz1.length < niz2.length ? niz1.length : niz2.length;
+    const controlFlow$ = new Subject();
+    return zip([firstSphere(controlFlow$), secondSphere(controlFlow$)]).pipe(
+        map((pair:[number, number])=> `${num++}. ${pair[0]} - ${pair[1]}`),
+        take(border)
+    ).subscribe(
+        {
+            next: (o:string)=> console.log(o),
+            complete: () => {
+                controlFlow$.next(1);
+            }
+        }
+    );
+};
 
 
 
