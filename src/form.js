@@ -18,9 +18,13 @@ export class Form{
         usernameLabel.textContent="Username: ";
         usernameDiv.appendChild(usernameLabel);
 
+        const usernameValueDiv = document.createElement("div");
+        usernameValueDiv.classList.add("usernameValueDiv");
+        usernameDiv.appendChild(usernameValueDiv);
+
         const usernameValue = document.createElement("input");
         usernameValue.classList.add("usernameValue");
-        usernameDiv.appendChild(usernameValue);
+        usernameValueDiv.appendChild(usernameValue);
 
         // First name
         const firstNameDiv = document.createElement("div");
@@ -249,4 +253,48 @@ export class Form{
         proba2.textContent="proba2";
         pairVolunteersViewDiv.appendChild(proba2);
     }
+
+    drawUsernameError(){
+        const usernameValueDiv = document.querySelector(".usernameValueDiv");
+
+        const errorInvalidUsername = document.createElement("div");
+        errorInvalidUsername.classList.add("errorInvalidUsername");
+        usernameValueDiv.appendChild(errorInvalidUsername);
+
+        const div1 = document.createElement("div");
+        div1.style.fontSize=".875em";
+        div1.textContent="Invalid username!";
+        errorInvalidUsername.appendChild(div1);
+
+        const div2 = document.createElement("div");
+        div2.style.fontSize=".700em";
+        div2.textContent="Username must contain: ";
+        errorInvalidUsername.appendChild(div2);
+
+        const div3 = document.createElement("div");
+        div3.style.fontSize=".700em";
+        div3.style.paddingLeft="10%";
+        div3.textContent="1) At least 8 characters";
+        errorInvalidUsername.appendChild(div3);
+
+        const div4 = document.createElement("div");
+        div4.style.fontSize=".700em";
+        div4.style.paddingLeft="10%";
+        div4.textContent="2) At least 1 capital character";
+        errorInvalidUsername.appendChild(div4);
+
+        const div5 = document.createElement("div");
+        div5.style.fontSize=".700em";
+        div5.style.paddingLeft="10%";
+        div5.textContent="3) At least 1 special character";
+        errorInvalidUsername.appendChild(div5);
+
+        const div6 = document.createElement("div");
+        div6.style.fontSize=".700em";
+        div6.style.paddingLeft="10%";
+        div6.textContent="4) At least 1 number";
+        errorInvalidUsername.appendChild(div6);
+
+    }
+
 }

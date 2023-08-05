@@ -1,10 +1,12 @@
-import { Observable, Observer, Subject, Subscription, filter, from, interval, map, merge, of, pairwise, take, takeUntil, zip } from "rxjs";
+import { Observable, Observer, Subject, Subscription, debounceTime, distinctUntilChanged, filter, from, fromEvent, interval, map, merge, of, take, takeUntil, zip } from "rxjs";
 import { Form } from "./form";
 import { Person } from "./person";
 import { getRandomIndex, getRandomInterval } from "./randomFunc";
+import { satisfiesCondition } from "./error";
 
 const form = new Form(document.body);
 form.drawInput();
+form.drawUsernameError();
 form.drawSpheres();
 form.drawVolunteersView();
 
@@ -25,7 +27,15 @@ femaleArray.push(new Person("Sara2", "Sara2", "Jovanovic", "F"));
 firstSphereNumber.textContent=`${maleArray.length}`;
 secondSphereNumber.textContent=`${femaleArray.length}`;
 
-function firstSphere(ob$: Observable<any>) {
+const usernameInput : HTMLInputElement = document.querySelector(".usernameValue");
+fromEvent(usernameInput, "input").pipe(
+    debounceTime(600),
+    map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value),
+    distinctUntilChanged(),
+    filter((x:string)=>x.length>=3),
+).subscribe((x:string)=>satisfiesCondition(x));
+
+function firstSphere(ob$: Observable<any>, interval:number) {
     return new Observable((gen)=>{
         const intervalId = setInterval(()=>{
             if (maleArray.length === 0) {
@@ -40,7 +50,7 @@ function firstSphere(ob$: Observable<any>) {
             maleArray.splice(randomIndex, 1);
             firstSphereNumber.textContent=`${maleArray.length}`;
             
-        }, 600); //getRandomInterval()
+        }, interval);
 
         ob$.subscribe(() => {
             clearInterval(intervalId);
@@ -51,7 +61,7 @@ function firstSphere(ob$: Observable<any>) {
     )*/
 }
 
-function secondSphere(ob$: Observable<any>) {
+function secondSphere(ob$: Observable<any>, interval:number) {
     return new Observable((gen)=>{
         const intervalId = setInterval(()=>{
             if (femaleArray.length === 0) {
@@ -66,7 +76,7 @@ function secondSphere(ob$: Observable<any>) {
             femaleArray.splice(randomIndex, 1);
             secondSphereNumber.textContent=`${femaleArray.length}`;
             
-        }, 400); //getRandomInterval()
+        }, interval);
 
         ob$.subscribe(() => {
             clearInterval(intervalId);
@@ -82,7 +92,7 @@ function genSoloVolunteers() {
         let num = 1;
         let border = 5;
         const controlFlow$ = new Subject();
-        return merge(firstSphere(controlFlow$), secondSphere(controlFlow$)).pipe(
+        return merge(firstSphere(controlFlow$, getRandomInterval()), secondSphere(controlFlow$, getRandomInterval())).pipe(
             map((x:Person) => `${num++}. ${x.firstName} (${x.username}) ${x.lastName}`),
             take(border)
         ).subscribe(
@@ -106,7 +116,7 @@ function genPairVolunteers() {
         let num = 1;
         let border = maleArray.length < femaleArray.length ? maleArray.length : femaleArray.length;
         const controlFlow$ = new Subject();
-        return zip([firstSphere(controlFlow$), secondSphere(controlFlow$)]).pipe(
+        return zip([firstSphere(controlFlow$, 500), secondSphere(controlFlow$, 500)]).pipe(
             map((pair:[Person, Person])=> `${num++}. par: ${pair[0].username} - ${pair[1].username}`),
             take(border)
         ).subscribe(

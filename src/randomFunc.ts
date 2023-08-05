@@ -3,5 +3,5 @@ export function getRandomIndex(niz:Array<any>) {
 }
 
 export function getRandomInterval() {
-    return Math.random() * 3000 + 100;
+    return Math.random() * 800 + 400;
 }
