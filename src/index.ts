@@ -1,8 +1,8 @@
-import { Observable, Observer, Subject, Subscription, debounceTime, distinctUntilChanged, filter, from, fromEvent, interval, map, merge, of, take, takeUntil, zip } from "rxjs";
+import { Observable, Observer, Subject, Subscription, debounceTime, distinctUntilChanged, filter, from, fromEvent, interval, map, merge, of, switchMap, take, takeUntil, throttleTime, zip } from "rxjs";
 import { Form } from "./form";
 import { Person } from "./person";
 import { getRandomIndex, getRandomInterval } from "./randomFunc";
-import { satisfiesCondition } from "./error";
+import { checkingInput, satisfiesCondition } from "./error";
 
 const form = new Form(document.body);
 form.drawInput();
@@ -32,8 +32,41 @@ fromEvent(usernameInput, "input").pipe(
     debounceTime(600),
     map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value),
     distinctUntilChanged(),
-    filter((x:string)=>x.length>=3),
+    //filter((x:string)=>x.length>=3),
 ).subscribe((x:string)=>satisfiesCondition(x));
+
+function inputBtnEvent() {
+    const inputBtn = document.querySelector(".buttonInputValue");
+    fromEvent(inputBtn, "click").pipe(
+        throttleTime(300),
+        //switchMap()
+    ).subscribe((o)=>inputPerson());
+}
+inputBtnEvent();
+
+function inputPerson() {
+    const username : string = (<HTMLInputElement>document.querySelector(".usernameValue")).value;
+    const firstName : string = (<HTMLInputElement>document.querySelector(".firstNameValue")).value;
+    const lastName : string = (<HTMLInputElement>document.querySelector(".lastNameValue")).value;
+    const gender : string = (<HTMLInputElement>document.querySelector('input[name="gender"]:checked')).value;
+    const correct : boolean = checkingInput(username, firstName, lastName, gender);
+    if(!correct)
+    {
+        return;
+    }
+    const person = new Person(username, firstName, lastName, gender);
+    if(gender==="M")
+    {
+        maleArray.push(person);
+        firstSphereNumber.textContent=`${maleArray.length}`;
+    }
+    else
+    {
+        femaleArray.push(person);
+        secondSphereNumber.textContent=`${femaleArray.length}`;
+    }
+    form.getEmptyInputFields();
+}
 
 function firstSphere(ob$: Observable<any>, interval:number) {
     return new Observable((gen)=>{

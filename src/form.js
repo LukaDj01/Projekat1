@@ -66,7 +66,7 @@ export class Form{
 
         const genderLabel = document.createElement("label");
         genderLabel.classList.add("genderLabel");
-        genderLabel.textContent="Pol: ";
+        genderLabel.textContent="Gender: ";
         genderLabelDiv.appendChild(genderLabel);
 
         // gender M & F
@@ -88,6 +88,7 @@ export class Form{
         genderMValue.type="radio";
         genderMValue.checked="checked";
         genderMValue.name="gender";
+        genderMValue.value="M";
         genderMValue.classList.add("genderMValue");
         genderMDiv.appendChild(genderMValue);
         
@@ -104,18 +105,24 @@ export class Form{
         const genderFValue = document.createElement("input");
         genderFValue.type="radio";
         genderFValue.name="gender";
+        genderFValue.value="F";
         genderFValue.classList.add("genderFValue");
         genderFDiv.appendChild(genderFValue);
 
         // Button
-        const buttonEnterDiv = document.createElement("div");
-        buttonEnterDiv.classList.add("buttonEnterDiv");
-        divInput.appendChild(buttonEnterDiv);
+        const buttonInputDiv = document.createElement("div");
+        buttonInputDiv.classList.add("buttonInputDiv");
+        divInput.appendChild(buttonInputDiv);
 
-        const buttonEnterValue = document.createElement("button");
-        buttonEnterValue.classList.add("buttonEnterValue");
-        buttonEnterValue.textContent="Enter";
-        buttonEnterDiv.appendChild(buttonEnterValue);
+        const buttonInputValue = document.createElement("button");
+        buttonInputValue.classList.add("buttonInputValue");
+        buttonInputValue.textContent="Input";
+        buttonInputDiv.appendChild(buttonInputValue);
+
+        // error
+        const errorDiv = document.createElement("div");
+        errorDiv.classList.add("errorDiv");
+        divInput.appendChild(errorDiv);
     }
 
     drawSpheres(){
@@ -294,7 +301,15 @@ export class Form{
         div6.style.paddingLeft="10%";
         div6.textContent="4) At least 1 number";
         errorInvalidUsername.appendChild(div6);
+    }
 
+    getEmptyInputFields(){
+        const username = document.querySelector(".usernameValue");
+        const firstName = document.querySelector(".firstNameValue");
+        const lastName = document.querySelector(".lastNameValue");
+        username.value="";
+        firstName.value="";
+        lastName.value="";
     }
 
 }
