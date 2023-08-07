@@ -204,6 +204,7 @@ export class Form{
         const countSoloVolunteersInput = document.createElement("input");
         countSoloVolunteersInput.type="number";
         countSoloVolunteersInput.classList.add("countSoloVolunteersInput");
+        countSoloVolunteersInput.value=0;
         countSoloVolunteersDiv.appendChild(countSoloVolunteersInput);
 
         // pair button
@@ -216,10 +217,6 @@ export class Form{
         const soloVolunteersViewDiv = document.createElement("div");
         soloVolunteersViewDiv.classList.add("soloVolunteersViewDiv");
         soloVolunteersDiv.appendChild(soloVolunteersViewDiv);
-
-        const proba1 = document.createElement("label");
-        proba1.textContent="proba";
-        soloVolunteersViewDiv.appendChild(proba1);
 
         // pair volunteers
         const pairVolunteersDiv = document.createElement("div");
@@ -243,6 +240,7 @@ export class Form{
         const countPairVolunteersInput = document.createElement("input");
         countPairVolunteersInput.type="number";
         countPairVolunteersInput.classList.add("countPairVolunteersInput");
+        countPairVolunteersInput.value=0;
         countPairVolunteersDiv.appendChild(countPairVolunteersInput);
 
         // pair button
@@ -255,10 +253,6 @@ export class Form{
         const pairVolunteersViewDiv = document.createElement("div");
         pairVolunteersViewDiv.classList.add("pairVolunteersViewDiv");
         pairVolunteersDiv.appendChild(pairVolunteersViewDiv);
-
-        const proba2 = document.createElement("label");
-        proba2.textContent="proba2";
-        pairVolunteersViewDiv.appendChild(proba2);
     }
 
     drawUsernameError(){
@@ -310,6 +304,30 @@ export class Form{
         username.value="";
         firstName.value="";
         lastName.value="";
+    }
+
+    addSoloVolView(text){
+        const soloVolunteersViewDiv = document.querySelector(".soloVolunteersViewDiv");
+
+        const div = document.createElement("div");
+        div.classList.add("volunteers");
+        soloVolunteersViewDiv.appendChild(div);
+
+        const label = document.createElement("label");
+        label.textContent=`${text}`;
+        div.appendChild(label);
+    }
+
+    addPairVolView(text){
+        const pairVolunteersViewDiv = document.querySelector(".pairVolunteersViewDiv");
+
+        const div = document.createElement("div");
+        div.classList.add("volunteers");
+        pairVolunteersViewDiv.appendChild(div);
+
+        const label = document.createElement("label");
+        label.textContent=`${text}`;
+        div.appendChild(label);
     }
 
 }

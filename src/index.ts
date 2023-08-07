@@ -15,6 +15,8 @@ const secondSphereNumber : HTMLLabelElement= document.querySelector(".secondSphe
 
 let maleArray:Array<Person> = [];
 let femaleArray:Array<Person> = [];
+let numSoloVolGenerater = 1;
+let numPairVolGenerater = 1;
 maleArray.push(new Person("Nikola123", "Nikola", "Jovanovic", "M"));
 maleArray.push(new Person("Kalu0", "Luka0", "Djordjevic", "M"));
 maleArray.push(new Person("Kalu1", "Luka1", "Djordjevic", "M"));
@@ -40,7 +42,7 @@ function inputBtnEvent() {
     fromEvent(inputBtn, "click").pipe(
         throttleTime(300),
         //switchMap()
-    ).subscribe((o)=>inputPerson());
+    ).subscribe(()=>inputPerson());
 }
 inputBtnEvent();
 
@@ -118,26 +120,31 @@ function secondSphere(ob$: Observable<any>, interval:number) {
     })
 }
 
+function createObserver(subject$: Subject<any>) : Observer<any>{
+    return {
+        next: (o)=> {
+            //console.log(o);
+        },
+        error: (o) => {
+            console.error("Error:", o);
+        },
+        complete: () => {
+            subject$.next(1);
+        }
+    }  
+};
+
 // solo volunteers
 function genSoloVolunteers() {
     const genSoloVolunteersBtn : HTMLButtonElement= document.querySelector(".genSoloVolunteersBtn");
     genSoloVolunteersBtn.onclick=()=>{
-        let num = 1;
-        let border = 5;
+        let border : number = parseInt((<HTMLInputElement>document.querySelector(".countSoloVolunteersInput")).value);
         const controlFlow$ = new Subject();
         return merge(firstSphere(controlFlow$, getRandomInterval()), secondSphere(controlFlow$, getRandomInterval())).pipe(
-            map((x:Person) => `${num++}. ${x.firstName} (${x.username}) ${x.lastName}`),
+            map((x:Person) => `${numSoloVolGenerater++}. ${x.firstName} (${x.username}) ${x.lastName}`),
+            switchMap((x:string)=>updateSoloVolView(x)),
             take(border)
-        ).subscribe(
-            {
-                next: (o:string)=> {
-                    console.log(o)
-                },
-                complete: () => {
-                    controlFlow$.next(1);
-                }
-            }
-        );
+        ).subscribe(createObserver(controlFlow$));
     };
 };
 genSoloVolunteers();
@@ -146,28 +153,28 @@ genSoloVolunteers();
 function genPairVolunteers() {
     const genPairVolunteersBtn : HTMLButtonElement= document.querySelector(".genPairVolunteersBtn");
     genPairVolunteersBtn.onclick=()=>{
-        let num = 1;
         let border = maleArray.length < femaleArray.length ? maleArray.length : femaleArray.length;
+        const countPairVolunteersInput : number = parseInt((<HTMLInputElement>document.querySelector(".countPairVolunteersInput")).value);
+        border = countPairVolunteersInput < border ? countPairVolunteersInput : border;
         const controlFlow$ = new Subject();
         return zip([firstSphere(controlFlow$, 500), secondSphere(controlFlow$, 500)]).pipe(
-            map((pair:[Person, Person])=> `${num++}. par: ${pair[0].username} - ${pair[1].username}`),
+            map((pair:[Person, Person])=> `${numPairVolGenerater++}. par: ${pair[0].username} - ${pair[1].username}`),
+            switchMap((x:string)=>updatePairVolView(x)),
             take(border)
-        ).subscribe(
-            {
-                next: (o:string)=> {
-                    console.log(o)
-                },
-                complete: () => {
-                    controlFlow$.next(1);
-                }
-            }
-        );
+        ).subscribe(createObserver(controlFlow$));
     };
 };
 genPairVolunteers();
 
+function updateSoloVolView(text: string) : Observable<any> {
+    form.addSoloVolView(text);
+    return from([1]);
+}
 
-
+function updatePairVolView(text: string) : Observable<any> {
+    form.addPairVolView(text);
+    return from([1]);
+}
 /*const arrayValues = [1, 2, 3, 4, 5, 6];
 
 // Funkcija koja generiše nasumičan indeks iz niza

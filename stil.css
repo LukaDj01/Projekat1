@@ -123,6 +123,7 @@ body{
 
 .usernameValue.error{
     border: 2px solid red;
+    border-radius: 3px;
 }
 
 
@@ -158,4 +159,15 @@ body{
 
 .errorInvalidUsername.error{
     display: block;
+}
+
+.soloVolunteersViewDiv, .pairVolunteersViewDiv{
+    display: flex;
+    flex-direction: column;
+}
+
+.volunteers{
+    margin-top: 5px;
+    border-top: 1px solid black;
+    color: red;
 }
