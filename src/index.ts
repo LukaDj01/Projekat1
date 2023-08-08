@@ -1,4 +1,4 @@
-import { Observable, Observer, Subject, Subscription, debounceTime, distinctUntilChanged, filter, from, fromEvent, interval, map, merge, of, switchMap, take, takeUntil, throttleTime, zip } from "rxjs";
+import { Observable, Observer, Subject, Subscription, debounceTime, distinctUntilChanged, filter, from, fromEvent, map, merge, switchMap, take, throttleTime, zip } from "rxjs";
 import { Form } from "./form";
 import { Person } from "./person";
 import { getRandomIndex, getRandomInterval } from "./randomFunc";
@@ -17,17 +17,32 @@ let maleArray:Array<Person> = [];
 let femaleArray:Array<Person> = [];
 let numSoloVolGenerater = 1;
 let numPairVolGenerater = 1;
-maleArray.push(new Person("Nikola123", "Nikola", "Jovanovic", "M"));
-maleArray.push(new Person("Kalu0", "Luka0", "Djordjevic", "M"));
-maleArray.push(new Person("Kalu1", "Luka1", "Djordjevic", "M"));
-maleArray.push(new Person("Kalu2", "Luka2", "Djordjevic", "M"));
-maleArray.push(new Person("Kalu3", "Luka3", "Djordjevic", "M"));
-femaleArray.push(new Person("Sara0", "Sara0", "Jovanovic", "F"));
-femaleArray.push(new Person("Sara1", "Sara1", "Jovanovic", "F"));
-femaleArray.push(new Person("Sara2", "Sara2", "Jovanovic", "F"));
 
-firstSphereNumber.textContent=`${maleArray.length}`;
-secondSphereNumber.textContent=`${femaleArray.length}`;
+const URL = "http://localhost:3000/people";
+function getPeople() : Observable<Array<Person>> {
+    const people = fetch(URL).then(response=>{
+        if(!response.ok)
+            throw new Error("Error");
+        else
+            return response.json();
+    }).catch(err=>console.error(err))
+    return from(people);
+};
+
+getPeople().subscribe({
+    next: (o:Array<Person>)=>{
+        o.forEach((person:Person)=>{
+            if(person.gender==="M")
+                maleArray.push(person);
+            else
+                femaleArray.push(person);
+        });
+    },
+    complete() {
+        form.updateFirstSphere(maleArray.length);
+        form.updateSecondSphere(femaleArray.length);
+    },
+});
 
 const usernameInput : HTMLInputElement = document.querySelector(".usernameValue");
 fromEvent(usernameInput, "input").pipe(
@@ -60,17 +75,17 @@ function inputPerson() {
     if(gender==="M")
     {
         maleArray.push(person);
-        firstSphereNumber.textContent=`${maleArray.length}`;
+        form.updateFirstSphere(maleArray.length);
     }
     else
     {
         femaleArray.push(person);
-        secondSphereNumber.textContent=`${femaleArray.length}`;
+        form.updateSecondSphere(femaleArray.length);
     }
     form.getEmptyInputFields();
 }
 
-function firstSphere(ob$: Observable<any>, interval:number) {
+function firstSphere(ob$: Observable<any>, interval:number) : Observable<Person>  {
     return new Observable((gen)=>{
         const intervalId = setInterval(()=>{
             if (maleArray.length === 0) {
@@ -79,9 +94,9 @@ function firstSphere(ob$: Observable<any>, interval:number) {
                 return;
             }
             const randomIndex = getRandomIndex(maleArray);
-            const randomValue = maleArray[randomIndex];
+            const randomPerson = maleArray[randomIndex];
 
-            gen.next(randomValue)
+            gen.next(randomPerson)
             maleArray.splice(randomIndex, 1);
             firstSphereNumber.textContent=`${maleArray.length}`;
             
@@ -96,7 +111,7 @@ function firstSphere(ob$: Observable<any>, interval:number) {
     )*/
 }
 
-function secondSphere(ob$: Observable<any>, interval:number) {
+function secondSphere(ob$: Observable<any>, interval:number) : Observable<Person> {
     return new Observable((gen)=>{
         const intervalId = setInterval(()=>{
             if (femaleArray.length === 0) {
@@ -105,9 +120,9 @@ function secondSphere(ob$: Observable<any>, interval:number) {
                 return;
             }
             const randomIndex = getRandomIndex(femaleArray);
-            const randomValue = femaleArray[randomIndex];
+            const randomPerson = femaleArray[randomIndex];
 
-            gen.next(randomValue)
+            gen.next(randomPerson)
             femaleArray.splice(randomIndex, 1);
             secondSphereNumber.textContent=`${femaleArray.length}`;
             
@@ -135,9 +150,9 @@ function createObserver(subject$: Subject<any>) : Observer<any>{
 };
 
 // solo volunteers
-function genSoloVolunteers() {
+function genSoloVolunteers(){
     const genSoloVolunteersBtn : HTMLButtonElement= document.querySelector(".genSoloVolunteersBtn");
-    genSoloVolunteersBtn.onclick=()=>{
+    genSoloVolunteersBtn.onclick=() : Subscription =>{
         let border : number = parseInt((<HTMLInputElement>document.querySelector(".countSoloVolunteersInput")).value);
         const controlFlow$ = new Subject();
         return merge(firstSphere(controlFlow$, getRandomInterval()), secondSphere(controlFlow$, getRandomInterval())).pipe(
@@ -152,7 +167,7 @@ genSoloVolunteers();
 // pair volunteers
 function genPairVolunteers() {
     const genPairVolunteersBtn : HTMLButtonElement= document.querySelector(".genPairVolunteersBtn");
-    genPairVolunteersBtn.onclick=()=>{
+    genPairVolunteersBtn.onclick=() : Subscription=>{
         let border = maleArray.length < femaleArray.length ? maleArray.length : femaleArray.length;
         const countPairVolunteersInput : number = parseInt((<HTMLInputElement>document.querySelector(".countPairVolunteersInput")).value);
         border = countPairVolunteersInput < border ? countPairVolunteersInput : border;
@@ -175,66 +190,3 @@ function updatePairVolView(text: string) : Observable<any> {
     form.addPairVolView(text);
     return from([1]);
 }
-/*const arrayValues = [1, 2, 3, 4, 5, 6];
-
-// Funkcija koja generiše nasumičan indeks iz niza
-function getRandomIndex() {
-  return Math.floor(Math.random() * arrayValues.length);
-}
-
-// Observable koji emituje brojeve redom: 0, 1, 2, ...
-const source$ = interval(200).pipe(
-  take(arrayValues.length)
-);
-
-// Pratimo Observable i ispisujemo nasumične vrednosti na ekran
-const subscription = source$.subscribe(() => {
-  if (arrayValues.length === 0) {
-    console.log("Nema više elemenata.");
-    subscription.unsubscribe(); // Prekidamo pretplatu kada nema više elemenata u nizu
-    return;
-  }
-
-  const randomIndex = getRandomIndex();
-  const randomValue = arrayValues[randomIndex];
-
-  // Izbacujemo pročitanu vrednost iz niza
-  arrayValues.splice(randomIndex, 1);
-
-  console.log(randomValue);
-});*/
-
-
-/*from(persons).pipe(
-    filter((person:Person)=>person.gender==="M"),
-).subscribe(o=>{
-    male.push(o);
-    firstSphereNumber.textContent = `${male.length}`
-});
-
-
-from(persons).pipe(
-    filter((person:Person)=>person.gender==="F")
-).subscribe(o=>{
-    female.push(o);
-    secondSphereNumber.textContent = `${female.length}`
-});
-
-
-function action1() : Subscription{
-    return zip([number1$,number2$]).pipe(
-    ).subscribe(i=>{    
-        console.log(i);
-    });
-}
-/*function action12(){
-    return new Observable((niz1, niz2)=>{
-        setInterval(()=>{
-        },3000);
-    }).pipe
-}*//*
-
-actBtn1.addEventListener("click", ()=> {
-   const subAct1 : Subscription = action1();
-   actBtn11.onclick = ()=>subAct1.unsubscribe();
-});*/

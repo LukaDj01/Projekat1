@@ -1,0 +1,52 @@
+{
+    "people":[
+        {
+            "username": "Nikola123!",
+            "firstName": "Nikola",
+            "lastName": "Jovanovic",
+            "gender": "M"
+        },
+        {
+            "username": "Kalu0234@",
+            "firstName": "Luka",
+            "lastName": "Djordjevic",
+            "gender": "M"
+        },
+        {
+            "username": "Stef333#",
+            "firstName": "Stefan",
+            "lastName": "Tosic",
+            "gender": "M"
+        },
+        {
+            "username": "Bogo122@2",
+            "firstName": "Bogdan",
+            "lastName": "Stefanovic",
+            "gender": "M"
+        },
+        {
+            "username": "Urke222*",
+            "firstName": "Uros",
+            "lastName": "Kostic",
+            "gender": "M"
+        },
+        {
+            "username": "Sarica12*",
+            "firstName": "Sara",
+            "lastName": "Jovanovic",
+            "gender": "F"
+        },
+        {
+            "username": "IMilica8&",
+            "firstName": "Milica",
+            "lastName": "Ilic",
+            "gender": "F"
+        },
+        {
+            "username": "MirNik12!",
+            "firstName": "Mirjana",
+            "lastName": "Nikolic",
+            "gender": "F"
+        }
+    ]
+}

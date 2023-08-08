@@ -330,4 +330,13 @@ export class Form{
         div.appendChild(label);
     }
 
+    updateFirstSphere(maleArrayLength){
+        const firstSphereNumber = document.querySelector(".firstSphereLabel");
+        firstSphereNumber.textContent=`${maleArrayLength}`;
+    }
+
+    updateSecondSphere(femaleArrayLength){
+        const secondSphereNumber = document.querySelector(".secondSphereLabel");
+        secondSphereNumber.textContent=`${femaleArrayLength}`;
+    }
 }
