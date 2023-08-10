@@ -2,7 +2,7 @@ import { Observable, Observer, Subject, Subscription, debounceTime, distinctUnti
 import { Form } from "./form";
 import { Person } from "./person";
 import { getRandomIndex, getRandomInterval } from "./randomFunc";
-import { checkingInput, satisfiesCondition } from "./error";
+import { checkingInput, checkingUsername, satisfiesCondition } from "./error";
 
 const form = new Form(document.body);
 form.drawInput();
@@ -66,8 +66,9 @@ function inputPerson() {
     const firstName : string = (<HTMLInputElement>document.querySelector(".firstNameValue")).value;
     const lastName : string = (<HTMLInputElement>document.querySelector(".lastNameValue")).value;
     const gender : string = (<HTMLInputElement>document.querySelector('input[name="gender"]:checked')).value;
-    const correct : boolean = checkingInput(username, firstName, lastName, gender);
-    if(!correct)
+    const correct1 : boolean = checkingInput(username, firstName, lastName, gender);
+    const correct2 : boolean = checkingUsername(username, maleArray.concat(femaleArray));
+    if(!correct1 || !correct2)
     {
         return;
     }

@@ -1,3 +1,5 @@
+import { Person } from "./person";
+
 function addErrorInvalidUsername() {
     const username = document.querySelector(".usernameValue");
     const errorInvalidUsername = document.querySelector(".errorInvalidUsername");
@@ -55,4 +57,33 @@ export function checkingInput(username: string, firstName: string, lastName:stri
         removeErrorInvalidInput();
         return true;
     }
+}
+
+function addErrorNotUniqueUsername() {
+    const errorDiv = document.querySelector(".errorDiv");
+
+    const errorText = document.createElement("div");
+    errorText.classList.add("errorText");
+    errorText.textContent="That username already exist!";
+    errorDiv.appendChild(errorText);
+}
+
+function removeErrorNotUniqueUsername() {
+    const errorDiv = document.querySelector(".errorDiv");
+    if (errorDiv.childElementCount!==0)
+        errorDiv.removeChild(errorDiv.lastChild);
+}
+
+export function checkingUsername(username: string, people : Array<Person>) : boolean {
+    removeErrorNotUniqueUsername();
+    let i : boolean = true;
+    people.forEach((person:Person)=>{
+        if(person.username===username)
+        {
+            removeErrorNotUniqueUsername()
+            addErrorNotUniqueUsername();
+            i = false;
+        }
+    });
+    return i;
 }
