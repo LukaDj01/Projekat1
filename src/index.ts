@@ -33,14 +33,22 @@ getPeople().subscribe({
     next: (o:Array<Person>)=>{
         o.forEach((person:Person)=>{
             if(person.gender==="M")
+            {
                 maleArray.push(person);
+                form.addMale(person);
+            }
             else
+            {
                 femaleArray.push(person);
+                form.addFemale(person);
+            }
         });
     },
     complete() {
-        form.updateFirstSphere(maleArray.length);
-        form.updateSecondSphere(femaleArray.length);
+        form.updateMaleView();
+        form.updateFirstSphere();
+        form.updateFemaleView();
+        form.updateSecondSphere();
     },
 });
 
@@ -76,12 +84,16 @@ function inputPerson() {
     if(gender==="M")
     {
         maleArray.push(person);
-        form.updateFirstSphere(maleArray.length);
+        form.addMale(person);
+        form.updateFirstSphere();
+        form.updateMaleView();
     }
     else
     {
         femaleArray.push(person);
-        form.updateSecondSphere(femaleArray.length);
+        form.addFemale(person);
+        form.updateSecondSphere();
+        form.updateFemaleView();
     }
     form.getEmptyInputFields();
 }
@@ -98,6 +110,7 @@ function firstSphere(ob$: Observable<any>, interval:number) : Observable<Person>
             const randomPerson = maleArray[randomIndex];
 
             gen.next(randomPerson)
+            form.removeMale(randomIndex);
             maleArray.splice(randomIndex, 1);
             firstSphereNumber.textContent=`${maleArray.length}`;
             
@@ -124,6 +137,7 @@ function secondSphere(ob$: Observable<any>, interval:number) : Observable<Person
             const randomPerson = femaleArray[randomIndex];
 
             gen.next(randomPerson)
+            form.removeFemale(randomIndex);
             femaleArray.splice(randomIndex, 1);
             secondSphereNumber.textContent=`${femaleArray.length}`;
             

@@ -1,6 +1,13 @@
+import { Person } from "./person";
+
 export class Form{
-    constructor(host){
+    host : HTMLElement ;
+    males : Array<Person>;
+    females : Array<Person>;
+    constructor(host : HTMLElement ){
         this.host=host;
+        this.males=[];
+        this.females=[];
     }
 
     drawInput(){
@@ -84,9 +91,9 @@ export class Form{
         genderMLabel.textContent="M ";
         genderMDiv.appendChild(genderMLabel);
 
-        const genderMValue = document.createElement("input");
+        const genderMValue : HTMLInputElement = document.createElement("input");
         genderMValue.type="radio";
-        genderMValue.checked="checked";
+        genderMValue.checked=true;
         genderMValue.name="gender";
         genderMValue.value="M";
         genderMValue.classList.add("genderMValue");
@@ -130,7 +137,22 @@ export class Form{
         spheresDiv.classList.add("spheresDiv");
         this.host.appendChild(spheresDiv);
 
-        // first
+        // males view
+        const malesViewDiv = document.createElement("div");
+        malesViewDiv.classList.add("malesViewDiv");
+        spheresDiv.appendChild(malesViewDiv);
+
+        /*let div;
+        let label;
+        div = document.createElement("div");
+        div.classList.add("males");
+        malesViewDiv.appendChild(div);
+
+        label = document.createElement("label");
+        label.textContent=`Luka (Kalu01#ss) Djordjevic`;
+        div.appendChild(label);*/
+
+        // first sphere
         const firstSphereDiv = document.createElement("div");
         firstSphereDiv.classList.add("firstSphereDiv");
         spheresDiv.appendChild(firstSphereDiv);
@@ -140,7 +162,7 @@ export class Form{
         firstSphereLabel.textContent="";
         firstSphereDiv.appendChild(firstSphereLabel);
 
-        // second
+        // second sphere
         const secondSphereDiv = document.createElement("div");
         secondSphereDiv.classList.add("secondSphereDiv");
         spheresDiv.appendChild(secondSphereDiv);
@@ -149,6 +171,11 @@ export class Form{
         secondSphereLabel.classList.add("secondSphereLabel");
         secondSphereLabel.textContent="";
         secondSphereDiv.appendChild(secondSphereLabel);
+
+        // females view
+        const femalesViewDiv = document.createElement("div");
+        femalesViewDiv.classList.add("femalesViewDiv");
+        spheresDiv.appendChild(femalesViewDiv);
     }
 
     /*drawActionButtons(){
@@ -201,10 +228,10 @@ export class Form{
         countSoloVolunteersLabel.textContent="Number: ";
         countSoloVolunteersDiv.appendChild(countSoloVolunteersLabel);
 
-        const countSoloVolunteersInput = document.createElement("input");
+        const countSoloVolunteersInput : HTMLInputElement = document.createElement("input");
         countSoloVolunteersInput.type="number";
         countSoloVolunteersInput.classList.add("countSoloVolunteersInput");
-        countSoloVolunteersInput.value=0;
+        countSoloVolunteersInput.value=`${0}`;
         countSoloVolunteersDiv.appendChild(countSoloVolunteersInput);
 
         // pair button
@@ -237,10 +264,10 @@ export class Form{
         countPairVolunteersLabel.textContent="Number: ";
         countPairVolunteersDiv.appendChild(countPairVolunteersLabel);
 
-        const countPairVolunteersInput = document.createElement("input");
+        const countPairVolunteersInput : HTMLInputElement = document.createElement("input");
         countPairVolunteersInput.type="number";
         countPairVolunteersInput.classList.add("countPairVolunteersInput");
-        countPairVolunteersInput.value=0;
+        countPairVolunteersInput.value=`${0}`;
         countPairVolunteersDiv.appendChild(countPairVolunteersInput);
 
         // pair button
@@ -298,15 +325,15 @@ export class Form{
     }
 
     getEmptyInputFields(){
-        const username = document.querySelector(".usernameValue");
-        const firstName = document.querySelector(".firstNameValue");
-        const lastName = document.querySelector(".lastNameValue");
+        const username : HTMLInputElement = document.querySelector(".usernameValue");
+        const firstName : HTMLInputElement = document.querySelector(".firstNameValue");
+        const lastName : HTMLInputElement = document.querySelector(".lastNameValue");
         username.value="";
         firstName.value="";
         lastName.value="";
     }
 
-    addSoloVolView(text){
+    addSoloVolView(text : string){
         const soloVolunteersViewDiv = document.querySelector(".soloVolunteersViewDiv");
 
         const div = document.createElement("div");
@@ -318,7 +345,7 @@ export class Form{
         div.appendChild(label);
     }
 
-    addPairVolView(text){
+    addPairVolView(text : string){
         const pairVolunteersViewDiv = document.querySelector(".pairVolunteersViewDiv");
 
         const div = document.createElement("div");
@@ -330,13 +357,72 @@ export class Form{
         div.appendChild(label);
     }
 
-    updateFirstSphere(maleArrayLength){
-        const firstSphereNumber = document.querySelector(".firstSphereLabel");
-        firstSphereNumber.textContent=`${maleArrayLength}`;
+    addMale(male: Person){
+        this.males.push(male);
     }
 
-    updateSecondSphere(femaleArrayLength){
+    removeMale(index : number){
+        this.males.splice(index, 1);
+        this.updateMaleView();
+    }
+
+    addFemale(female: Person){
+        this.females.push(female);
+    }
+
+    removeFemale(index : number){
+        this.females.splice(index, 1);
+        this.updateFemaleView();
+    }
+
+    updateFirstSphere(){
+        const firstSphereNumber = document.querySelector(".firstSphereLabel");
+        firstSphereNumber.textContent=`${this.males.length}`;
+    }
+
+    updateSecondSphere(){
         const secondSphereNumber = document.querySelector(".secondSphereLabel");
-        secondSphereNumber.textContent=`${femaleArrayLength}`;
+        secondSphereNumber.textContent=`${this.females.length}`;
+    }
+
+    updateMaleView(){
+        const malesViewDiv = document.querySelector(".malesViewDiv");
+        while(malesViewDiv.childElementCount)
+        {
+            malesViewDiv.removeChild(malesViewDiv.lastChild);
+        }
+
+        this.males.forEach((male:Person)=>{
+            const text = `${male.firstName} (${male.username}) ${male.lastName}`;
+
+            const div = document.createElement("div");
+            div.classList.add("males");
+            malesViewDiv.appendChild(div);
+    
+            const label = document.createElement("label");
+            label.textContent=`${text}`;
+            div.appendChild(label);
+        })
+        
+    }
+
+    updateFemaleView(){
+        const femalesViewDiv = document.querySelector(".femalesViewDiv");
+        while(femalesViewDiv.childElementCount)
+        {
+            femalesViewDiv.removeChild(femalesViewDiv.lastChild);
+        }
+
+        this.females.forEach((female:Person)=>{
+            const text = `${female.firstName} (${female.username}) ${female.lastName}`;
+
+            const div = document.createElement("div");
+            div.classList.add("females");
+            femalesViewDiv.appendChild(div);
+
+            const label = document.createElement("label");
+            label.textContent=`${text}`;
+            div.appendChild(label);
+        })
     }
 }
