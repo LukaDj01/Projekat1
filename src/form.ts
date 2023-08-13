@@ -4,10 +4,14 @@ export class Form{
     host : HTMLElement ;
     males : Array<Person>;
     females : Array<Person>;
+    numSoloVolGenerater : number;
+    numPairVolGenerater : number;
     constructor(host : HTMLElement ){
         this.host=host;
         this.males=[];
         this.females=[];
+        this.numSoloVolGenerater = 1;
+        this.numPairVolGenerater = 1;
     }
 
     drawInput(){
@@ -130,6 +134,8 @@ export class Form{
         const errorDiv = document.createElement("div");
         errorDiv.classList.add("errorDiv");
         divInput.appendChild(errorDiv);
+
+        this.drawUsernameError();
     }
 
     drawSpheres(){
@@ -141,16 +147,6 @@ export class Form{
         const malesViewDiv = document.createElement("div");
         malesViewDiv.classList.add("malesViewDiv");
         spheresDiv.appendChild(malesViewDiv);
-
-        /*let div;
-        let label;
-        div = document.createElement("div");
-        div.classList.add("males");
-        malesViewDiv.appendChild(div);
-
-        label = document.createElement("label");
-        label.textContent=`Luka (Kalu01#ss) Djordjevic`;
-        div.appendChild(label);*/
 
         // first sphere
         const firstSphereDiv = document.createElement("div");
@@ -177,32 +173,6 @@ export class Form{
         femalesViewDiv.classList.add("femalesViewDiv");
         spheresDiv.appendChild(femalesViewDiv);
     }
-
-    /*drawActionButtons(){
-        const actBtnDiv = document.createElement("div");
-        actBtnDiv.classList.add("actBtnDiv");
-        this.host.appendChild(actBtnDiv);
-
-        // Button genSoloVol
-        const genSoloVolunteersDiv = document.createElement("div");
-        genSoloVolunteersDiv.classList.add("genSoloVolunteersDiv");
-        actBtnDiv.appendChild(genSoloVolunteersDiv);
-
-        const genSoloVolunteersBtn = document.createElement("button");
-        genSoloVolunteersBtn.classList.add("genSoloVolunteersBtn");
-        genSoloVolunteersBtn.textContent="Action 1";
-        genSoloVolunteersDiv.appendChild(genSoloVolunteersBtn);
-
-        // Button genPair
-        const genPairVolunteersDiv = document.createElement("div");
-        genPairVolunteersDiv.classList.add("genPairVolunteersDiv");
-        actBtnDiv.appendChild(genPairVolunteersDiv);
-
-        const genPairVolunteersBtn = document.createElement("button");
-        genPairVolunteersBtn.classList.add("genPairVolunteersBtn");
-        genPairVolunteersBtn.textContent="Action 11";
-        genPairVolunteersDiv.appendChild(genPairVolunteersBtn);
-    }*/
 
     drawVolunteersView(){
         const volunteersViewDiv = document.createElement("div");
@@ -341,7 +311,7 @@ export class Form{
         soloVolunteersViewDiv.appendChild(div);
 
         const label = document.createElement("label");
-        label.textContent=`${text}`;
+        label.textContent=`${this.numSoloVolGenerater++}. ${text}`;
         div.appendChild(label);
     }
 
@@ -353,12 +323,13 @@ export class Form{
         pairVolunteersViewDiv.appendChild(div);
 
         const label = document.createElement("label");
-        label.textContent=`${text}`;
+        label.textContent=`${this.numPairVolGenerater++}. pair: ${text}`;
         div.appendChild(label);
     }
 
     addMale(male: Person){
         this.males.push(male);
+        this.updateMaleView();
     }
 
     removeMale(index : number){
@@ -368,6 +339,7 @@ export class Form{
 
     addFemale(female: Person){
         this.females.push(female);
+        this.updateFemaleView();
     }
 
     removeFemale(index : number){
@@ -403,7 +375,7 @@ export class Form{
             label.textContent=`${text}`;
             div.appendChild(label);
         })
-        
+        this.updateFirstSphere();
     }
 
     updateFemaleView(){
@@ -424,5 +396,14 @@ export class Form{
             label.textContent=`${text}`;
             div.appendChild(label);
         })
+        this.updateSecondSphere();
+    }
+
+    getMale(index:number) : Person {
+        return this.males[index];
+    }
+
+    getFemale(index:number) : Person {
+        return this.females[index];
     }
 }

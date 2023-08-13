@@ -68,19 +68,18 @@ function addErrorNotUniqueUsername() {
     errorDiv.appendChild(errorText);
 }
 
-function removeErrorNotUniqueUsername() {
+/*function removeErrorNotUniqueUsername() {
     const errorDiv = document.querySelector(".errorDiv");
     if (errorDiv.childElementCount!==0)
         errorDiv.removeChild(errorDiv.lastChild);
-}
+}*/
 
 export function checkingUsername(username: string, people : Array<Person>) : boolean {
-    removeErrorNotUniqueUsername();
     let i : boolean = true;
     people.forEach((person:Person)=>{
         if(person.username===username)
         {
-            removeErrorNotUniqueUsername()
+            removeErrorInvalidInput()
             addErrorNotUniqueUsername();
             i = false;
         }
