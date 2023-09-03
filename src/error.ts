@@ -24,12 +24,12 @@ export function satisfiesCondition(string:string) {
     }
 }
 
-function addErrorInvalidInput() {
+function addErrorInvalidInput(text: string) {
     const errorDiv = document.querySelector(".errorDiv");
 
     const errorText = document.createElement("div");
     errorText.classList.add("errorText");
-    errorText.textContent="Invalid input!";
+    errorText.textContent=`${text}`;
     errorDiv.appendChild(errorText);
 }
 
@@ -43,13 +43,13 @@ export function checkingInput(username: string, firstName: string, lastName:stri
     if(username==="" || firstName==="" || lastName==="" || gender==="")
     {
         removeErrorInvalidInput()
-        addErrorInvalidInput();
+        addErrorInvalidInput("Invalid input!");
         return false;
     }
     else if (!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(username))
     {
         removeErrorInvalidInput()
-        addErrorInvalidInput();
+        addErrorInvalidInput("Invalid username!");
         return false;
     }
     else

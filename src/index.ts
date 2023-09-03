@@ -38,7 +38,7 @@ fromEvent(usernameInput, "input").pipe(
     debounceTime(600),
     map((ev:InputEvent)=>(<HTMLInputElement>ev.target).value),
     distinctUntilChanged(),
-    //filter((x:string)=>x.length>=3),
+    filter((x:string)=>x.length>=4),
 ).subscribe((x:string)=>satisfiesCondition(x));
 
 const inputBtn : HTMLButtonElement = document.querySelector(".buttonInputValue");
