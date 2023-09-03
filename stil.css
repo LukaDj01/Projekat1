@@ -113,6 +113,9 @@ body{
     margin-bottom: 20px;
     padding: 5px;
     background-color: rgb(231, 231, 231);
+    height: 200px;
+    width: 250px;
+    overflow: scroll;
 }
 
 .genPairVolunteersDiv, .countPairVolunteersDiv, .genSoloVolunteersDiv, .countSoloVolunteersDiv{
