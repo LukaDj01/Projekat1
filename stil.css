@@ -2,6 +2,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: grey;
 }
 
 /* input */
@@ -11,7 +12,8 @@ body{
     border: 2px solid black;
     width: fit-content;
     height: fit-content;
-    margin: 25px
+    margin: 25px;
+    background-color: rgb(231, 231, 231);
 }
 
 .usernameDiv, .firstNameDiv, .lastNameDiv{
@@ -54,6 +56,7 @@ body{
 
 .buttonInputValue{
     margin-bottom: 5px;
+    background-color: white;
 }
 
 /* spheres */
@@ -77,6 +80,7 @@ body{
     height: 200px;
     align-items: center;
     justify-content: space-around;
+    background-color: rgb(231, 231, 231);
 }
 
 .firstSphereLabel, .secondSphereLabel{
@@ -108,6 +112,7 @@ body{
     margin-right: 40px;
     margin-bottom: 20px;
     padding: 5px;
+    background-color: rgb(231, 231, 231);
 }
 
 .genPairVolunteersDiv, .countPairVolunteersDiv, .genSoloVolunteersDiv, .countSoloVolunteersDiv{
@@ -177,6 +182,7 @@ body{
     height: 200px;
     width: 250px;
     overflow: scroll;
+    background-color: rgb(231, 231, 231);
 }
 
 .males, .females{
